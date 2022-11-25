@@ -15,7 +15,7 @@ class GameChatListener : Listener {
     fun onAsyncGameChat(event: AsyncPlayerChatEvent) {
         val msg = event.message
         val group = MiraiBot.getBot(Config.PTBConfigBot).getGroup(Config.PTBConfigGroup)
-        if (msg.startsWith("#") && PotatoCore.getBot() != null) {
+        if (msg.startsWith("#") && PotatoCore.bot != null) {
             val forwardMsg: String = msg.substring(1)
            group.sendMessageMirai(
                 event.player.displayName + ": " + forwardMsg

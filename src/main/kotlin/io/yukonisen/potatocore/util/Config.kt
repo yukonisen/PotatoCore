@@ -12,7 +12,7 @@ val config
 object Config {
     // PotatoCore Options
     // config.yml -> [options]
-    val plugin: Plugin = PotatoCore.getInstance()
+    val plugin: PotatoCore = PotatoCore.instance
     val pluginConfig: FileConfiguration = YamlConfiguration.loadConfiguration(File(plugin.dataFolder, "config.yml"))
     val ConfigVersion: String? = pluginConfig.getString("options.config-version")
 
