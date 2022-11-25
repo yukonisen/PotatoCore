@@ -1,0 +1,45 @@
+# Configurations for PotatoCore
+# by yukonisen#QwQ
+# General options
+options:
+  # DON'T TOUCH THIS!
+  config-version: 1
+  # language files are located in directory PotatoCore/language/
+  # e.g. "zh_CN.yml" "en_US.yml"
+  languageFile: "zh_CN.yml"
+
+# PotatoBot options [DEPENDENCY REQUIRED!!!]
+# NOTE: This requires MiraiMC as dependency and have logged in the bot specified below.
+# To get MiraiMC please visit [https://github.com/DreamVoid/MiraiMC]
+potatobot:
+  # ONLY enable this if the bot is logged in.
+  enabled: false
+  config:
+    # [bot]: Number of the bot account. LOGIN REQUIRED.
+    # [group]: Number of the group that you wish to enable PotatoBot.
+    # [admin]: Number of the admin(s) that can control PotatoBot from group.
+    bot: 114514
+    group: 1919810
+    admins:
+        - "1145141919810"
+        - "1145141919810000"
+
+  # PotatoBot Functions
+  functions:
+    # Broadcasting will send messages to group when players join or quit server
+    broadcast:
+      enabled: true
+      join_msg: "%player% 加入"
+      quit_msg: "%player% 退出"
+    # Message Forwarding lets player send cross-game messages between QQ group and game chat.
+    # Only messages that start with the prefix will be forwarded to the game/group.
+    # Leave prefix as blank ("") to forward ANY messages.
+    forward:
+      enabled: true
+      game-prefix: "#"
+      group-prefix: "#"
+    # Group Command lets admins (listed above) perform commands directly from group chat.
+    # e.g. sending "!#kick yukonisen" MEANS performing "/kick yukonisen" on the server.
+    group-command:
+      enabled: true
+      command-prefix: "!#"
