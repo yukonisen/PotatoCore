@@ -6,7 +6,7 @@
 
     <groupId>io.yukonisen.potatocore</groupId>
     <artifactId>potatocore</artifactId>
-    <version>0.2</version>
+    <version>0.3-rc1</version>
 
     <properties>
         <java.version>1.8</java.version>

@@ -1,12 +1,11 @@
 package io.yukonisen.potatocore
 
+import io.yukonisen.potatocore.command.PotatoCoreCommand
 import io.yukonisen.potatocore.listener.game.GameChatListener
 import io.yukonisen.potatocore.listener.game.PlayerJoinQuitEvent
 import io.yukonisen.potatocore.listener.group.GroupMesssageEvent
 import io.yukonisen.potatocore.util.Config.PTBConfigBot
 import io.yukonisen.potatocore.util.Config.PTBConfigGroup
-import io.yukonisen.potatocore.util.Lang.Ready
-import me.dreamvoid.miraimc.api.MiraiBot
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
@@ -25,11 +24,14 @@ class PotatoCore : JavaPlugin() {
 
     override fun onEnable() {
         instance = this
+        // register listeners
         val pm = Bukkit.getPluginManager()
         pm.registerEvents(GroupMesssageEvent(), this)
         pm.registerEvents(GameChatListener(), this)
         pm.registerEvents(PlayerJoinQuitEvent(), this)
-        logger.log(Level.INFO, Ready)
+        // register commands
+        Bukkit.getPluginCommand("potatocore")?.setExecutor(PotatoCoreCommand())
+
         logger.log(Level.INFO, "PotatoCore ready.")
         logger.log(Level.INFO, "Current QQ bot: $PTBConfigBot, group: $PTBConfigGroup")
     }
@@ -40,15 +42,5 @@ class PotatoCore : JavaPlugin() {
 
     companion object {
         lateinit var instance: PotatoCore
-        val bot: MiraiBot?
-            get() {
-                try {
-                    MiraiBot.getBot(PTBConfigBot)
-                } catch (elementException: NoSuchElementException) {
-                    println("[PotatoCore] BOT not logged in.")
-                    return null
-                }
-                return MiraiBot.getBot(PTBConfigBot)
-            }
     }
 }

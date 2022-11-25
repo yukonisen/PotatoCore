@@ -38,8 +38,18 @@ potatobot:
       enabled: true
       game-prefix: "#"
       group-prefix: "#"
+      # Formats can be customized.
+      # “game”: Format of the messages that are forwarded to the game chat.
+      # "hover": Format of the hover of the message being forwarded to the game chat.
+      # "group": Format of the messages that are forwarded to the group.
+      # %groupName%, %senderID% and %senderTime% only avaliable in hover.
+      format:
+        game: "%sender% > %message%"
+        hover: "来自群&b“%groupName%”&f。\n\n&b发送者：&f%sender% &7(%senderID%)\n&b时间戳：&f%sendTime%"
+        group: "%player%: %message%"
     # Group Command lets admins (listed above) perform commands directly from group chat.
     # e.g. sending "!#kick yukonisen" MEANS performing "/kick yukonisen" on the server.
+    # TODO: NOT YET IMPLEMENTED
     group-command:
       enabled: true
       command-prefix: "!#"

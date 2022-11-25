@@ -7,8 +7,8 @@ description: PotatoCore for the UnitedPotato
 depend:
   - MiraiMC
 commands:
-  ptb:
-    description: "PotatoBot main command"
+  potatocore:
+    description: "PotatoCore main command"
 permissions:
   potato.*:
     description: "PotatoCore permission group"
