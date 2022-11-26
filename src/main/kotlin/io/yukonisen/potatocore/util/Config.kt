@@ -3,9 +3,7 @@ package io.yukonisen.potatocore.util
 import io.yukonisen.potatocore.PotatoCore
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
-import org.bukkit.plugin.Plugin
 import java.io.File
-import java.util.ArrayList
 
 val config
     get() = Config

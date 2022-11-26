@@ -1,9 +1,6 @@
 package io.yukonisen.potatocore.listener.group
 
 import io.yukonisen.potatocore.util.Config
-import io.yukonisen.potatocore.util.Config.PTBConfigBot
-import io.yukonisen.potatocore.util.Config.PTBConfigGroup
-import io.yukonisen.potatocore.util.Config.PTBFuncForwardEnabled
 import io.yukonisen.potatocore.util.Config.plugin
 import me.dreamvoid.miraimc.api.MiraiBot
 import me.dreamvoid.miraimc.bukkit.event.message.passive.MiraiGroupMessageEvent
@@ -21,10 +18,10 @@ class GroupMesssageEvent : Listener {
     @EventHandler
     fun onGroupMessage(event: MiraiGroupMessageEvent) {
         val message = event.message
-        val group = MiraiBot.getBot(PTBConfigBot).getGroup(PTBConfigGroup)
-        val isGroup = event.groupID == PTBConfigGroup
+        val group = MiraiBot.getBot(Config.PTBConfigBot).getGroup(Config.PTBConfigGroup)
+        val isGroup = event.groupID == Config.PTBConfigGroup
 
-        if (isGroup && PTBFuncForwardEnabled) {
+        if (isGroup && Config.PTBFuncForwardEnabled) {
             val prefix = Config.PTBFuncForwardGamePrefix.toString()
             if (message.startsWith(prefix)) {
                 val eventMessage = event.message.toString().replaceFirst(prefix, "")
