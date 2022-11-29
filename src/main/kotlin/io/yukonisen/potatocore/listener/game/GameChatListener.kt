@@ -15,7 +15,7 @@ class GameChatListener : Listener {
     fun onAsyncGameChat(event: AsyncPlayerChatEvent) {
         val eventMessage = event.message
         val group = MiraiBot.getBot(Config.PTBConfigBot).getGroup(Config.PTBConfigGroup)
-        val prefix = Config.PTBFuncForwardGamePrefix.toString()
+        val prefix = Config.PTBFuncForwardGroupPrefix.toString()
         val eventPlayerName = event.player.displayName
         if (eventMessage.startsWith(prefix)) {
             val forwardMsg: String = eventMessage.replaceFirst(prefix, "")
