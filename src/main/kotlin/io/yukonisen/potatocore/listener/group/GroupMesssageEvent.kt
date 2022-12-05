@@ -1,6 +1,8 @@
 package io.yukonisen.potatocore.listener.group
 
 import io.yukonisen.potatocore.util.Config
+import io.yukonisen.potatocore.util.Config.PTBConfigBot
+import io.yukonisen.potatocore.util.Config.PTBConfigGroup
 import io.yukonisen.potatocore.util.Config.plugin
 import me.dreamvoid.miraimc.api.MiraiBot
 import me.dreamvoid.miraimc.bukkit.event.message.passive.MiraiGroupMessageEvent
@@ -18,7 +20,8 @@ class GroupMesssageEvent : Listener {
     @EventHandler
     fun onGroupMessage(event: MiraiGroupMessageEvent) {
         val message = event.message
-        val group = MiraiBot.getBot(Config.PTBConfigBot).getGroup(Config.PTBConfigGroup)
+        val cfgGroup = MiraiBot.getBot(Config.PTBConfigBot).getGroup(Config.PTBConfigGroup)
+        val srcGroup = MiraiBot.getBot(PTBConfigBot).getGroup(event.groupID)
         val isGroup = event.groupID == Config.PTBConfigGroup
 
         if (isGroup && Config.PTBFuncForwardEnabled) {
@@ -51,13 +54,14 @@ class GroupMesssageEvent : Listener {
             }
         }
 
-        if (message == "!#ping") { val serverVersion = Bukkit.getVersion()
+        if (message == "!#ping") {
+            val serverVersion = Bukkit.getVersion()
             val osName = System.getProperty("os.name")
             val osVer = System.getProperty("os.version")
             val authors = plugin.description.authors
             val pluginVersion = plugin.description.version
             val apiVersion = plugin.description.apiVersion
-            group.sendMessageMirai(
+            srcGroup.sendMessageMirai(
                 "PotatoCore of the UnitedPotato\n" +
                         "by: $authors\n" +
                         "ver: $pluginVersion (api: $apiVersion)\n" +
@@ -65,6 +69,10 @@ class GroupMesssageEvent : Listener {
                         "Server: $serverVersion"
 
             )
+        }
+
+        if (message == "冒泡") {
+            srcGroup.sendMessageMirai("冒泡")
         }
     }
 }
