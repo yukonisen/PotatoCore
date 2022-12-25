@@ -22,7 +22,6 @@ class GroupMesssageEvent : Listener {
     fun onGroupMessage(event: MiraiGroupMessageEvent) {
         val message = event.message
         val srcGroup = MiraiBot.getBot(PTBConfigBot).getGroup(event.groupID)
-        println("recv msg [$message] from group " + event.groupID)
         val inGroupList = PTBConfigGroups.toString().contains(event.groupID.toString())
 
         if (inGroupList && Config.PTBFuncForwardEnabled) {
