@@ -17,14 +17,22 @@ class PotatoCoreCommand : CommandExecutor {
             }
             "debug" -> {
                 sender.sendMessage("§6PotatoCore §bINFO\n" +
-                        "B=" + Config.PTBConfigBot + " G=" + Config.PTBConfigGroup + "\n" +
+                        "B=" + Config.PTBConfigBot + " G=" + Config.PTBConfigGroups + "\n" +
                         "AL=" + Config.PTBConfigAdmins + "\n" +
                         "OS=" + System.getProperty("os.name") + "" + System.getProperty("os.version") + "\n" +
-                        "§bFunctions:" + "\n" +
+                        "§6Functions:" + "§6\n" +
                         "Broadcast=" + Config.PTBFuncBroadcastEnabled + "\n" +
                         "Forward=" + Config.PTBFuncForwardEnabled + "\n" +
                         "GroupCmd=" + Config.PTBFuncGroupCmdEnabled + "\n"
                 )
+                val groupList: List<*>? = Config.PTBConfigGroups
+                groupList?.forEach { group ->
+                    sender.sendMessage("group: $group")
+                }
+                val adminList: List<*>? = Config.PTBConfigAdmins
+                adminList?.forEach { admin ->
+                    sender.sendMessage("admin: $admin")
+                }
             }
             else -> {
                 sender.sendMessage("§6PotatoCore §f> Unknown command")

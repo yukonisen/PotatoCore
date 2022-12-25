@@ -19,7 +19,7 @@ object Config {
     val CHECK_UPDATE: Boolean = pluginConfig.getBoolean("check-update")
     val PTBEnabled: Boolean = pluginConfig.getBoolean("potatobot.enabled")
     val PTBConfigBot: Long = pluginConfig.getLong("potatobot.config.bot")
-    val PTBConfigGroup: Long = pluginConfig.getLong("potatobot.config.group")
+    val PTBConfigGroups: List<Long>? = pluginConfig.getList("potatobot.config.groups") as List<Long>?
     val PTBConfigAdmins: List<*>? = pluginConfig.getList("potatobot.config.admins")
     val PTBFuncBroadcastEnabled: Boolean = pluginConfig.getBoolean("potatobot.functions.broadcast.enabled")
     val PTBFuncBroadcastJoinMsg: String? = pluginConfig.getString("potatobot.functions.broadcast.join_msg")

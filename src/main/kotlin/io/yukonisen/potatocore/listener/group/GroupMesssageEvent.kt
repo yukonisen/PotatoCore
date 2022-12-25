@@ -2,7 +2,7 @@ package io.yukonisen.potatocore.listener.group
 
 import io.yukonisen.potatocore.util.Config
 import io.yukonisen.potatocore.util.Config.PTBConfigBot
-import io.yukonisen.potatocore.util.Config.PTBConfigGroup
+import io.yukonisen.potatocore.util.Config.PTBConfigGroups
 import io.yukonisen.potatocore.util.Config.plugin
 import me.dreamvoid.miraimc.api.MiraiBot
 import me.dreamvoid.miraimc.bukkit.event.message.passive.MiraiGroupMessageEvent
@@ -13,6 +13,7 @@ import org.bukkit.Bukkit
 import org.bukkit.Bukkit.getServer
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import java.text.SimpleDateFormat
 
 
 class GroupMesssageEvent : Listener {
@@ -20,11 +21,11 @@ class GroupMesssageEvent : Listener {
     @EventHandler
     fun onGroupMessage(event: MiraiGroupMessageEvent) {
         val message = event.message
-        val cfgGroup = MiraiBot.getBot(Config.PTBConfigBot).getGroup(Config.PTBConfigGroup)
         val srcGroup = MiraiBot.getBot(PTBConfigBot).getGroup(event.groupID)
-        val isGroup = event.groupID == Config.PTBConfigGroup
+        println("recv msg [$message] from group " + event.groupID)
+        val inGroupList = PTBConfigGroups.toString().contains(event.groupID.toString())
 
-        if (isGroup && Config.PTBFuncForwardEnabled) {
+        if (inGroupList && Config.PTBFuncForwardEnabled) {
             val prefix = Config.PTBFuncForwardGamePrefix.toString()
             if (message.startsWith(prefix)) {
                 val eventMessage = event.message.toString().replaceFirst(prefix, "")
@@ -38,6 +39,7 @@ class GroupMesssageEvent : Listener {
                 val messageText = Config.PTBFuncForwardFmtToGame.toString()
                     .replace("%message%", eventMessage)
                     .replace("%sender%", sender)
+                    .replace("%groupName%", eventGroupName)
                     .replace("&", "§")
 
                 val hoverText = Config.PTBFuncForwardFmtHover.toString()

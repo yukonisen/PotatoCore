@@ -11,19 +11,26 @@ class PlayerJoinQuitEvent : Listener {
 
     @EventHandler
     fun onPlayerJoin(join: PlayerJoinEvent) {
-        val group = MiraiBot.getBot(Config.PTBConfigBot).getGroup(Config.PTBConfigGroup)
+
         if (Config.PTBFuncBroadcastEnabled) {
             val msg = Config.PTBFuncBroadcastJoinMsg?.replace("%player%", join.player.name)
-            group.sendMessageMirai(msg)
+            val groupList: List<*>? = Config.PTBConfigGroups
+            groupList?.forEach { j ->
+                val group = MiraiBot.getBot(Config.PTBConfigBot).getGroup(j.toString().toLong())
+                group.sendMessageMirai(msg)
+            }
         }
     }
 
     @EventHandler
     fun onPlayerQuit(quit: PlayerQuitEvent) {
-        val group = MiraiBot.getBot(Config.PTBConfigBot).getGroup(Config.PTBConfigGroup)
         if (Config.PTBFuncBroadcastEnabled) {
             val msg = Config.PTBFuncBroadcastQuitMsg?.replace("%player%", quit.player.name)
-            group.sendMessageMirai(msg)
+            val groupList: List<*>? = Config.PTBConfigGroups
+            groupList?.forEach { q ->
+                val group = MiraiBot.getBot(Config.PTBConfigBot).getGroup(q.toString().toLong())
+                group.sendMessageMirai(msg)
+            }
         }
     }
 }

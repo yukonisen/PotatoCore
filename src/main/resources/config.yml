@@ -19,10 +19,12 @@ potatobot:
     # [group]: Number of the group that you wish to enable PotatoBot.
     # [admin]: Number of the admin(s) that can control PotatoBot from group.
     bot: 114514
-    group: 1919810
+    groups:
+        - "1919810"
+        - "1919811"
     admins:
-        - "1145141919810"
-        - "1145141919810000"
+        - "1919812"
+        - "1919813"
 
   # PotatoBot Functions
   functions:
@@ -44,7 +46,7 @@ potatobot:
       # "group": Format of the messages that are forwarded to the group.
       # %groupName%, %senderID% and %senderTime% only avaliable in hover.
       format:
-        game: "%sender% > %message%"
+        game: "%sender% > %message%  &7&o@%groupName%"
         hover: "来自群&b“%groupName%”&f。\n\n&b发送者：&f%sender% &7(%senderID%)\n&b时间戳：&f%sendTime%"
         group: "%player%: %message%"
     # Group Command lets admins (listed above) perform commands directly from group chat.

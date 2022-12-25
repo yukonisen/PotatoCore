@@ -14,16 +14,19 @@ class GameChatListener : Listener {
     @EventHandler
     fun onAsyncGameChat(event: AsyncPlayerChatEvent) {
         val eventMessage = event.message
-        val group = MiraiBot.getBot(Config.PTBConfigBot).getGroup(Config.PTBConfigGroup)
         val prefix = Config.PTBFuncForwardGroupPrefix.toString()
-        val eventPlayerName = event.player.displayName
         if (eventMessage.startsWith(prefix)) {
             val forwardMsg: String = eventMessage.replaceFirst(prefix, "")
+            val eventPlayerName = event.player.displayName
             val messageText = Config.PTBFuncForwardFmtToGroup.toString()
                 .replace("%player%", eventPlayerName)
                 .replace("%message%", forwardMsg)
                 .replace("&", "§")
-            group.sendMessageMirai(messageText)
+            val groupList: List<Long>? = Config.PTBConfigGroups
+            groupList?.forEach {
+                val group = MiraiBot.getBot(Config.PTBConfigBot).getGroup(it.toString().toLong())
+                group.sendMessageMirai(messageText)
+            }
         }
     }
 }

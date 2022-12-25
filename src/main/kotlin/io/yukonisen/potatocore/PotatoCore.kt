@@ -5,7 +5,7 @@ import io.yukonisen.potatocore.listener.game.GameChatListener
 import io.yukonisen.potatocore.listener.game.PlayerJoinQuitEvent
 import io.yukonisen.potatocore.listener.group.GroupMesssageEvent
 import io.yukonisen.potatocore.util.Config.PTBConfigBot
-import io.yukonisen.potatocore.util.Config.PTBConfigGroup
+import io.yukonisen.potatocore.util.Config.PTBConfigGroups
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
@@ -33,7 +33,7 @@ class PotatoCore : JavaPlugin() {
         Bukkit.getPluginCommand("potatocore")?.setExecutor(PotatoCoreCommand())
 
         logger.log(Level.INFO, "PotatoCore ready.")
-        logger.log(Level.INFO, "Current QQ bot: $PTBConfigBot, group: $PTBConfigGroup")
+        logger.log(Level.INFO, "Current QQ bot: $PTBConfigBot, group: $PTBConfigGroups")
     }
 
     override fun onDisable() {
