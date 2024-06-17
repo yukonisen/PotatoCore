@@ -1,0 +1,7 @@
+{
+  "id": "potatocore",
+  "name": "PotatoCore",
+  "version": "0.1",
+  "authors": ["yukonisen"],
+  "main": "io.yukonisen.potatocore.PotatoCore"
+}

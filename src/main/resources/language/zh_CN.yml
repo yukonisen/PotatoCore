@@ -1,4 +1,0 @@
-general:
-  ready: "PotatoCore 就绪"
-  readynoptb: "PotatoCore 就绪（PTB 未启用）"
-  reloaded: "已重新加载配置文件"

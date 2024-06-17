@@ -1,46 +1,73 @@
 package io.yukonisen.potatocore
 
-import io.yukonisen.potatocore.command.PotatoCoreCommand
-import io.yukonisen.potatocore.listener.game.GameChatListener
-import io.yukonisen.potatocore.listener.game.PlayerJoinQuitEvent
-import io.yukonisen.potatocore.listener.group.GroupMesssageEvent
-import io.yukonisen.potatocore.util.Config.PTBConfigBot
-import io.yukonisen.potatocore.util.Config.PTBConfigGroups
-import org.bukkit.Bukkit
-import org.bukkit.plugin.java.JavaPlugin
-import java.io.File
-import java.util.logging.Level
+import com.google.inject.Inject
+import com.velocitypowered.api.event.Subscribe
+import com.velocitypowered.api.event.proxy.ProxyInitializeEvent
+import com.velocitypowered.api.event.proxy.ProxyShutdownEvent
+import com.velocitypowered.api.plugin.Dependency
+import com.velocitypowered.api.plugin.Plugin
+import com.velocitypowered.api.plugin.annotation.DataDirectory
+import com.velocitypowered.api.proxy.ProxyServer
+import io.yukonisen.potatocore.listener.BotGroupListener
+import io.yukonisen.potatocore.listener.ConnectListener
+import io.yukonisen.potatocore.listener.MessageListener
+import io.yukonisen.potatocore.util.Config
+import io.yukonisen.potatocore.util.reloadConfig
+import org.slf4j.Logger
+import java.nio.file.Path
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
-class PotatoCore : JavaPlugin() {
-    override fun onLoad() {
-        config.options().copyDefaults()
-        saveDefaultConfig()
-        saveResource("language/zh_CN.yml", false)
-        logger.log(Level.INFO, "[PotatoCore] Loading")
-        if (!File(dataFolder, "config.yml").exists()) {
-            saveDefaultConfig()
-        }
-    }
 
-    override fun onEnable() {
-        instance = this
-        // register listeners
-        val pm = Bukkit.getPluginManager()
-        pm.registerEvents(GroupMesssageEvent(), this)
-        pm.registerEvents(GameChatListener(), this)
-        pm.registerEvents(PlayerJoinQuitEvent(), this)
-        // register commands
-        Bukkit.getPluginCommand("potatocore")?.setExecutor(PotatoCoreCommand())
+@Plugin(
+    id = "potatocore",
+    name = "PotatoCore",
+    version = "0.2",
+    authors = ["yukonisen"],
+    description = "PotatoCore for Velocity",
+    url = "https://upt.curiousers.org/docs/PotatoCore",
+    dependencies = [Dependency(id = "miraimc")]
+)
 
-        logger.log(Level.INFO, "PotatoCore ready.")
-        logger.log(Level.INFO, "Current QQ bot: $PTBConfigBot, group: $PTBConfigGroups")
-    }
-
-    override fun onDisable() {
-        println("PotatoCore Disabled")
-    }
-
+class PotatoCore @Inject constructor(
+    @DataDirectory
+    val dataDirectory: Path,
+    val logger: Logger,
+    val proxy: ProxyServer
+) {
     companion object {
-        lateinit var instance: PotatoCore
+        private lateinit var instance: PotatoCore
+        val plugin by lazy { instance }
+        lateinit var config: Config
     }
+
+    init {
+        instance = this
+        reloadConfig()
+    }
+
+    @Subscribe
+    fun onProxyInitialization(event: ProxyInitializeEvent?) {
+        proxy.eventManager.register(this, BotGroupListener())
+        proxy.eventManager.register(this, MessageListener())
+        proxy.eventManager.register(this, ConnectListener())
+        /* FINISH INITIALIZE PLUGIN */
+        logger.info("PotatoCore ready")
+        logger.info("Bot uin set to: ${config.bot.uin}")
+        /*broadCast()*/
+    }
+
+    @Subscribe
+    fun onDisable(event: ProxyShutdownEvent) {
+        logger.info("PotatoCore Disabled")
+    }
+
+    private fun broadCast() {
+        val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+        val formattedTime = LocalTime.now().format(formatter)
+        /*SendMsg().private("[$formattedTime]\n" +
+                "PotatoCore initialized on Velocity startup.\n" +
+                "Currently configured groups: ${config.bot.groups.toList()}", 0) // TODO */
+    }
+
 }
