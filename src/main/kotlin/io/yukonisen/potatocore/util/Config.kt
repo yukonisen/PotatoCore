@@ -4,6 +4,11 @@ import com.charleskorn.kaml.Yaml
 import io.yukonisen.potatocore.PotatoCore.Companion.config
 import io.yukonisen.potatocore.PotatoCore.Companion.plugin
 import kotlinx.serialization.Serializable
+import java.io.FileNotFoundException
+import java.io.IOException
+import java.nio.file.Files
+import kotlin.io.path.createDirectory
+import kotlin.io.path.exists
 
 @Serializable
 data class Config(
@@ -45,12 +50,23 @@ data class Config(
 }
 
 fun reloadConfig() {
+    val dir = plugin.dataDirectory
+    val configFile = dir.resolve("config.yml").toFile()
+    val dataFile = dir.resolve("player_data.yml").toFile()
     try {
+        if (!dir.exists()) dir.createDirectory()
+        if (!dataFile.exists()) dataFile.createNewFile()
+        if (!configFile.exists()) {
+            Config::class.java.getResourceAsStream("/" + configFile.name)?.use { default ->
+                Files.copy(default, configFile.toPath())
+            } ?: throw IOException("Unable to save default config.yml! Validate the integrity of your plugin jar.")
+        }
         config = Yaml.default.decodeFromString(
             Config.serializer(),
-            plugin.dataDirectory.resolve("config.yml").toFile().readText()
+            configFile.readText()
         )
     } catch (e: Exception) {
-        plugin.logger.info("Error while loading config: ${e.message}")
+        plugin.logger.error("Error while loading config: ${e.message}")
+        plugin.proxy.shutdown()
     }
 }

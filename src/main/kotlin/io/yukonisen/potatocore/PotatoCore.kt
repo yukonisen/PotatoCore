@@ -13,21 +13,12 @@ import io.yukonisen.potatocore.listener.ConnectListener
 import io.yukonisen.potatocore.listener.MessageListener
 import io.yukonisen.potatocore.util.Config
 import io.yukonisen.potatocore.util.reloadConfig
+import io.yukonisen.potatocore.util.updatePlayerData
 import org.slf4j.Logger
 import java.nio.file.Path
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
-
-@Plugin(
-    id = "potatocore",
-    name = "PotatoCore",
-    version = "0.2",
-    authors = ["yukonisen"],
-    description = "PotatoCore for Velocity",
-    url = "https://upt.curiousers.org/docs/PotatoCore",
-    dependencies = [Dependency(id = "miraimc")]
-)
 
 class PotatoCore @Inject constructor(
     @DataDirectory

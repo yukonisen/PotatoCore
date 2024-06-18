@@ -74,16 +74,10 @@ class ConnectListener() {
         val protocolState = event.player.protocolState.name
         plugin.logger.info("$playerName TRIGGERED: $protocolState, $protocolVersion")
         when (protocolVersion) {
-            "1.20" -> {
-                plugin.logger.debug("1.20 ok")
-                playerVersionMap[playerName] = "1.20"
-            }
-            "1.21" -> {
-                plugin.logger.debug("1.21 ok")
-                playerVersionMap[playerName] = "1.21"
-            }
+            "1.20" -> playerVersionMap[playerName] = "1.20"
+            "1.21" -> playerVersionMap[playerName] = "1.21"
             else -> {
-                plugin.logger.debug("???")
+                plugin.logger.warn("Cannot assign for $playerName because unknown protocol version $protocolVersion")
                 playerVersionMap[playerName] = "unknown"
             }
         }

@@ -1,7 +1,16 @@
 {
   "id": "potatocore",
   "name": "PotatoCore",
-  "version": "0.2",
-  "authors": ["yukonisen"],
-  "main": "io.yukonisen.potatocore.PotatoCore"
+  "version": "${version}",
+  "description": "PotatoCore for Velocity",
+  "authors": [
+    "yukonisen"
+  ],
+  "main": "io.yukonisen.potatocore.PotatoCore",
+  "dependencies": [
+    {
+      "id": "miraimc",
+      "optional": true
+    }
+  ]
 }

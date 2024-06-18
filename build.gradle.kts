@@ -25,6 +25,12 @@ repositories {
     }
 }
 
+tasks.withType<ProcessResources> {
+    filesMatching("velocity-plugin.json") {
+        expand(mapOf("version" to project.version))
+    }
+}
+
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
 }
