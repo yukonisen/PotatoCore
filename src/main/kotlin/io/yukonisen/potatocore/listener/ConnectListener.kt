@@ -2,13 +2,8 @@ package io.yukonisen.potatocore.listener
 
 import com.velocitypowered.api.event.Subscribe
 import com.velocitypowered.api.event.connection.DisconnectEvent
-import com.velocitypowered.api.event.player.ServerConnectedEvent
 import com.velocitypowered.api.event.player.ServerPreConnectEvent
-import io.yukonisen.potatocore.PotatoCore.Companion.config
 import io.yukonisen.potatocore.PotatoCore.Companion.plugin
-import io.yukonisen.potatocore.util.getPlayerData
-import me.dreamvoid.miraimc.api.MiraiBot
-import me.dreamvoid.miraimc.api.bot.MiraiGroup
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 
@@ -43,17 +38,6 @@ class ConnectListener() {
     }
 
     @Subscribe
-    fun onLogin(event: ServerConnectedEvent) {
-        plugin.logger.info("Triggered: onLogin")
-        val src: MiraiGroup = MiraiBot.getBot(config.bot.uin).getGroup(0) /* TODO */
-        val playerName = event.player.username
-        val server = event.server.serverInfo.name
-        var msg = "[+] $playerName ($server)"
-        if (getPlayerData(playerName)?.playerUin?.let { it < 0 } == true) msg += "\n玩家已绑定但未验证"
-        /*src.sendMessageMirai(msg)*/
-    }
-
-    @Subscribe
     fun onDisconnect(event: DisconnectEvent) {
         val playerName = event.player.username
         /* Remove cache for this session */
@@ -61,18 +45,22 @@ class ConnectListener() {
     }
 
     private fun switchServer(playerName: String, serverName: String) {
-        plugin.logger.info("switch $playerName to server $serverName")
+        plugin.logger.info("switch $playerName to server \"$serverName\"")
         plugin.proxy.getPlayer(playerName).ifPresent { p ->
             plugin.proxy.getServer(serverName).ifPresent { target ->
                 p.createConnectionRequest(target).fireAndForget()
             }
         }
+        playerVersionMap.remove(playerName)
     }
 
     private fun autoAssign(event: ServerPreConnectEvent, playerName: String) {
         val protocolVersion = event.player.protocolVersion.toString()
         val protocolState = event.player.protocolState.name
-        plugin.logger.info("$playerName TRIGGERED: $protocolState, $protocolVersion")
+        if (protocolState == "CONFIGURATION" || protocolState == "LOGIN") {
+            plugin.logger.info("$playerName TRIGGERED: $protocolState, $protocolVersion")
+        } else return
+
         when (protocolVersion) {
             "1.20" -> playerVersionMap[playerName] = "1.20"
             "1.21" -> playerVersionMap[playerName] = "1.21"
