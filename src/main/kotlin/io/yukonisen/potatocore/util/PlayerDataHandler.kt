@@ -20,49 +20,39 @@ val playerDataMap = mutableMapOf<String, Data>()
 val uinMap = mutableMapOf<Long, String>()
 val yaml = Yaml.default
 
-fun updatePlayerData(playerName: String, uuid: String, playerUin: Long, subscribedGroupChat: Boolean) {
-    val content = mutableMapOf<String, Data>()
-    val uinMapTemp = mutableMapOf<Long, String>()
+fun readDataFileContent(): Map<String, Data> {
     var fileContent = dataFile.readText()
     if (fileContent.isEmpty()) {
         plugin.logger.warn("Data yml is empty, initializing default placeholder data.")
         /* Create default placeholder data to avoid empty file content */
-        content["@DONT_REMOVE_PLACEHOLDER@"] = Data("00000000-0000-0000-0000-000000000000", 0, false)
-        playerDataMap.remove(playerName)
-        dataFile.writeText(yaml.encodeToString(content))
-        /* After initialized, read content again */
-        fileContent = dataFile.readText()
+        val defaultData = mapOf("@DONT_REMOVE_PLACEHOLDER@" to Data("00000000-0000-0000-0000-000000000000", 0, false))
+        dataFile.writeText(yaml.encodeToString(defaultData))
+        fileContent = yaml.encodeToString(defaultData)
     }
+    return yaml.decodeFromString(fileContent)
+}
 
-    val result = yaml.decodeFromString<Map<String, Data>>(fileContent)
-    content.putAll(result)
-    for ((name, data) in result) uinMapTemp[data.playerUin] = name
+fun updatePlayerData(playerName: String, uuid: String, playerUin: Long, subscribedGroupChat: Boolean) {
+    val content = readDataFileContent().toMutableMap()
+    val uinMapTemp = mutableMapOf<Long, String>()
 
+    for ((name, data) in content) uinMapTemp[data.playerUin] = name
     content[playerName] = Data(uuid, playerUin, subscribedGroupChat)
     playerDataMap.remove(playerName)
     dataFile.writeText(yaml.encodeToString(content))
     plugin.logger.info("Successfully updated playerData for $playerName")
-
     uinMap.clear()
     uinMap.putAll(uinMapTemp)
 }
 
-fun getPlayerData (playerName: String): Data? {
-    if (playerDataMap.containsKey(playerName)) {
-        return playerDataMap[playerName]
-    }
-
-    if (dataFile.readText().isEmpty()) return null
-
-    val fileContent = dataFile.readText()
-    if (fileContent.isEmpty()) return null
-
-    val result = yaml.decodeFromString<Map<String, Data>>(fileContent)
-    val data = result[playerName]
-    if (data != null) playerDataMap[playerName] = data
-    return result[playerName]
+fun getPlayerData(playerName: String): Data? {
+    val content = readDataFileContent()
+    return content[playerName]
 }
 
-fun getPlayerName (uin: Long): String? {
-    return uinMap[uin]
+fun getPlayerName(uin: Long): String? {
+    val content = readDataFileContent()
+    val uinMapTemp = mutableMapOf<Long, String>()
+    for ((name, data) in content) uinMapTemp[data.playerUin] = name
+    return uinMapTemp[uin]
 }

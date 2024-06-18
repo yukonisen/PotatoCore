@@ -23,22 +23,17 @@ class ConnectListener() {
 
     @Subscribe
     fun onConnect(event: ServerPreConnectEvent) {
-        plugin.logger.info("Triggered: onConnect")
         val clientBrand = event.player.clientBrand ?: "unknown"
         val playerName = event.player.username
-        val gameProfile = event.player.gameProfile
-        plugin.logger.info("$playerName connected with $clientBrand, gameProfile = $gameProfile")
 
         autoAssign(event, playerName)
 
-        val targetServerCache = playerVersionMap[playerName]
-        plugin.logger.info("Cache for $playerName is $targetServerCache")
-
-        when (targetServerCache) {
+        when (val playerVersion = playerVersionMap[playerName]) {
             "1.20" -> switchServer(playerName, SERVER_FORGE)
             "1.21" -> switchServer(playerName, SERVER_POTATO)
             else -> {
-                event.player.disconnect(Component.text("PotatoTerminal 无法为你分配目标服务器……\n" +
+                event.player.disconnect(Component.text("检测到的客户端版本: $playerVersion\n" +
+                        "PotatoTerminal 无法为你分配目标服务器……\n" +
                         "接受的客户端类型：\n\n" +
                         "AnvilCraft: 版本 1.20.1 (1.20), forge\n" +
                         "Fantasy Generation: 版本 1.21 (1.21), vanilla, fabric, geyser").color(NamedTextColor.AQUA))
@@ -75,21 +70,20 @@ class ConnectListener() {
     }
 
     private fun autoAssign(event: ServerPreConnectEvent, playerName: String) {
-
         val protocolVersion = event.player.protocolVersion.toString()
         val protocolState = event.player.protocolState.name
         plugin.logger.info("$playerName TRIGGERED: $protocolState, $protocolVersion")
         when (protocolVersion) {
             "1.20" -> {
-                plugin.logger.info("1.20 ok")
+                plugin.logger.debug("1.20 ok")
                 playerVersionMap[playerName] = "1.20"
             }
             "1.21" -> {
-                plugin.logger.info("1.21 ok")
+                plugin.logger.debug("1.21 ok")
                 playerVersionMap[playerName] = "1.21"
             }
             else -> {
-                plugin.logger.info("???")
+                plugin.logger.debug("???")
                 playerVersionMap[playerName] = "unknown"
             }
         }
